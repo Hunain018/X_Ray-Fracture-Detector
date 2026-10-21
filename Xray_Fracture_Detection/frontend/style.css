@@ -1,0 +1,448 @@
+/* ==========================================================================
+   ORTHOSCAN — Diagnostic Imaging UI (X-Ray Fracture Detection)
+   Same clinical-viewer design system as NeuroScan: calibrated grid,
+   corner-bracket "scan frames", monospace data readouts, restrained teal
+   accent for active state, coral reserved only for positive findings.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --bg: #0a0d12;
+    --panel: #10141b;
+    --panel-alt: #141a24;
+    --border: #212836;
+    --border-strong: #333d50;
+    --text-primary: #edf0f4;
+    --text-secondary: #8994a8;
+    --text-muted: #515b70;
+    --accent: #45d6c2;
+    --accent-soft: rgba(69, 214, 194, 0.10);
+    --accent-strong: #7fe8d9;
+    --alert: #ff6b5e;
+    --alert-soft: rgba(255, 107, 94, 0.10);
+}
+
+/* ==========================================================================
+   1. GLOBAL SETUP
+   ========================================================================== */
+#MainMenu, header, footer, [data-testid="collapsedControl"], section[data-testid="stSidebar"] {
+    display: none !important;
+}
+
+body, .stApp {
+    background-color: var(--bg) !important;
+    color: var(--text-primary) !important;
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 34px 34px;
+}
+
+.main .block-container {
+    padding-top: 2.4rem !important;
+    padding-bottom: 3rem !important;
+    max-width: 1180px !important;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+}
+
+::selection {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+/* ==========================================================================
+   2. HEADER + METADATA STRIP
+   ========================================================================== */
+.eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.header-container h1 {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 2.3rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em;
+    color: #ffffff !important;
+    margin-bottom: 10px !important;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.02rem;
+    margin-bottom: 26px;
+    max-width: 640px;
+}
+
+.meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--panel);
+}
+
+.meta-item {
+    flex: 1;
+    min-width: 150px;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+}
+
+.meta-item:last-child {
+    border-right: none;
+}
+
+.meta-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.meta-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.86rem;
+    color: var(--text-primary);
+}
+
+.meta-value.status-ready {
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   3. PANELS (scan-frame containers)
+   ========================================================================== */
+.panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    font-size: 1.28rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+}
+
+.panel-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 3px 8px;
+}
+
+.field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Scan-frame: corner-bracket wrapper around imagery */
+.scan-frame {
+    position: relative;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    border-radius: 4px;
+    padding: 14px;
+    margin-top: 14px;
+}
+
+.scan-frame .corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+}
+
+.scan-frame .corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.scan-frame .corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+.scan-frame .corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+.scan-frame .corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+.scan-frame img {
+    border-radius: 2px;
+    display: block;
+}
+
+.scan-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   4. FILE UPLOADER
+   ========================================================================== */
+[data-testid="stFileUploader"] {
+    border: 1.5px dashed var(--border-strong) !important;
+    border-radius: 8px !important;
+    padding: 14px !important;
+    background-color: var(--panel-alt) !important;
+    transition: border-color 0.2s ease;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: var(--accent) !important;
+}
+
+[data-testid="stFileUploader"] section {
+    background-color: transparent !important;
+}
+
+[data-testid="stFileUploader"] small {
+    color: var(--text-muted) !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+}
+
+[data-testid="stFileUploader"] button {
+    background-color: var(--panel) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-strong) !important;
+    border-radius: 5px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.82rem !important;
+}
+
+[data-testid="stFileUploader"] button:hover {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+/* ==========================================================================
+   5. CONFIDENCE SLIDER
+   ========================================================================== */
+div[data-baseweb="slider"] > div > div {
+    background: var(--accent) !important;
+    height: 3px !important;
+}
+
+div[data-baseweb="slider"] > div {
+    background-color: var(--border-strong) !important;
+    height: 3px !important;
+}
+
+div[data-baseweb="slider"] [role="slider"] {
+    background-color: var(--bg) !important;
+    border: 2px solid var(--accent) !important;
+    width: 14px !important;
+    height: 14px !important;
+    box-shadow: 0 0 0 4px var(--accent-soft) !important;
+}
+
+[data-testid*="ThumbValue"] {
+    color: #ffffff !important;
+}
+
+[data-testid*="TickBar"] {
+    display: none !important;
+}
+
+/* ==========================================================================
+   6. DETECT BUTTON
+   ========================================================================== */
+div.stButton > button {
+    background-color: var(--accent) !important;
+    color: #06110f !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.03em;
+    padding: 13px 0 !important;
+    margin-top: 18px !important;
+    transition: all 0.15s ease !important;
+}
+
+div.stButton > button:hover {
+    background-color: var(--accent-strong) !important;
+    box-shadow: 0 0 0 4px var(--accent-soft) !important;
+}
+
+div.stButton > button:disabled {
+    background-color: var(--panel-alt) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* ==========================================================================
+   7. RESULTS: empty state + detection cards
+   ========================================================================== */
+.empty-result-box {
+    border: 1px dashed var(--border);
+    padding: 60px 30px;
+    border-radius: 8px;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    margin-top: 14px;
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(255,255,255,0.012) 0px,
+            rgba(255,255,255,0.012) 1px,
+            transparent 1px,
+            transparent 12px
+        );
+}
+
+.detections-wrap {
+    margin-top: 18px;
+}
+
+.detections-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.detection-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--alert);
+    border-radius: 5px;
+    background: var(--panel-alt);
+    margin-bottom: 8px;
+}
+
+.detection-row .det-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    min-width: 140px;
+}
+
+.detection-row .det-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.detection-row .det-bar-fill {
+    height: 100%;
+    background: var(--alert);
+    border-radius: 3px;
+}
+
+.detection-row .det-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--alert);
+    min-width: 52px;
+    text-align: right;
+}
+
+.no-detection-box {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--panel-alt);
+    border-radius: 5px;
+    padding: 14px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 14px;
+}
+
+/* ==========================================================================
+   8. DISCLAIMER / NOTICE
+   ========================================================================== */
+.disclaimer-section {
+    border-left: 3px solid var(--border-strong);
+    padding: 4px 0 4px 20px;
+}
+
+.disclaimer-section h3 {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary) !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+
+.disclaimer-section p {
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    margin-bottom: 6px;
+    line-height: 1.6;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+/* ==========================================================================
+   9. MISC STREAMLIT OVERRIDES
+   ========================================================================== */
+.stSpinner > div {
+    border-top-color: var(--accent) !important;
+}
+
+.stSpinner p {
+    font-family: 'IBM Plex Mono', monospace !important;
+    color: var(--text-secondary) !important;
+    font-size: 0.82rem !important;
+}
+
+div[data-testid="stAlert"] {
+    background-color: var(--panel-alt) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 5px !important;
+    color: var(--text-secondary) !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.85rem !important;
+}

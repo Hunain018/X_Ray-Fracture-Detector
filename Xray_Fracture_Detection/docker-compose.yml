@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: brain-tumor-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/weights:/app/weights
+    environment:
+      - MODEL_WEIGHTS_PATH=/app/weights/best.pt
+      - CONF_THRESHOLD=0.5
+      - IMG_SIZE=640
+      - ALLOWED_ORIGINS=*
+
+  frontend:
+    build: ./frontend
+    container_name: brain-tumor-frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
